@@ -1,0 +1,39 @@
+/* Author > Following */
+.fdfp-follow-links a {
+  display: inline-block;
+  text-transform: uppercase;
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+  background: #fff;
+  color: #444;
+  text-align: center;
+}
+.fdfp-follow-links a:hover,
+.fdfp-follow-links a:focus {
+    color: #444;
+}
+.fdfp-author-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.fdfp-author-list-inner-row {
+    background: #ececec;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #c7c7c7;
+    border-radius: 5px;
+}
+.fdfp-author-list-inner-row .avatar-img {
+  display: block;
+  background: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+  max-width: 92px;
+}
+.fdfp-author-list-inner-row .author-title {
+    display: block;
+    margin-top: 0px;
+}

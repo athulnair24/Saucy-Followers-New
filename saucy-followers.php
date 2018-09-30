@@ -14,7 +14,7 @@
  * @wordpress-plugin
  * Plugin Name:       Saucy Followers
  * Plugin URI:        https://mydigitalsauce.com/
- * Description:       Allows users to follow other users and see updates from users they follow.
+ * Description:       Saucy followers is a WordPress Plugin that enables you to create an follow/unfollow system. Follow other users get notifications when those users publish content, comment, and more.
  * Version:           0.1.1
  * Author:            MyDigitalSauce
  * Author URI:        https://mydigitalsauce.com/

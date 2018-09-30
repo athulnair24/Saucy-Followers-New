@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-
+Saucy followers is a WordPress Plugin that enables you to create an follow/unfollow system. Follow other users get notifications when those users publish content, comment, and more.
 
 == Installation ==
 

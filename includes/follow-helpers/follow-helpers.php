@@ -97,9 +97,40 @@ function fdfp_follow_user( $user_id = 0, $user_to_follow = 0 ) {
 
 		do_action( 'fdfp_post_follow_user', $user_id, $user_to_follow );
 
-		return true;
+		$check_mail = fdfp_notif_user_on_follow($user_to_follow, $user_id);
+
+		// if( $check_mail )
+		// 	return true;
+		// else
+		// 	return false;
 	}
 	return false;
+}
+
+/**
+ * Mail a user
+ *
+ * Email notification to user on new follow
+ *
+ * @access      private
+ * @since       1.0
+ * @param 		int $user_to_follow - the ID of the user that is being followed
+ * @param 		int $user_id        - the ID of the user that is doing the following
+ * @return      bool
+ */
+function fdfp_notif_user_on_follow($user_to_follow , $user_id){
+	
+	$to_user_info = get_userdata($user_to_follow);
+	$user_info = get_userdata($user_id);
+	
+	$to = $to_user_info->user_email;	
+	$subject = 'New Follower';
+	$body = 'Username : '.$user_info->user_login.' is following you. Thank You.';
+	$headers = array('Content-Type: text/html; charset=UTF-8');
+		
+	wp_mail( $to, $subject, $body, $headers );
+	
+	return true;
 }
 
 

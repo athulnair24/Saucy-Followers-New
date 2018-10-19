@@ -65,20 +65,25 @@ function fdfp_notif_users_followers_on_publish_post( $ID, $post ) {
 	
 	$followers_list = get_user_meta( $author, '_fdfp_followers', true );
 
-	foreach($followers_list as $follower){
-		$name = get_the_author_meta( 'display_name', $author );
-		// $email = get_user_meta(  $follower, 'user_email', true );
-		$email = get_userdata($follower);
-		$title = $post->post_title;
-		$permalink = get_permalink( $ID );
-		$edit = get_edit_post_link( $ID, '' );
-		$to = $email->user_email;
-		$subject = sprintf( 'Article: %s', $title );
-		$message = sprintf ('Your friend: %s! New article “%s” has been published.' . "\n\n", $name, $title);
-		$message .= sprintf( 'View: %s', $permalink );		
-		$headers = array('Content-Type: text/html; charset=UTF-8');
-		wp_mail( $to, $subject, $message, $headers );	
+	if ( $followers_list ) {
+
+		foreach($followers_list as $follower){
+			$name = get_the_author_meta( 'display_name', $author );
+			// $email = get_user_meta(  $follower, 'user_email', true );
+			$email = get_userdata($follower);
+			$title = $post->post_title;
+			$permalink = get_permalink( $ID );
+			$edit = get_edit_post_link( $ID, '' );
+			$to = $email->user_email;
+			$subject = sprintf( 'Article: %s', $title );
+			$message = sprintf ('Your friend: %s! New article “%s” has been published.' . "\n\n", $name, $title);
+			$message .= sprintf( 'View: %s', $permalink );		
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+			wp_mail( $to, $subject, $message, $headers );	
+		}
+		
 	}
+
 }
 add_action( 'publish_post', 'fdfp_notif_users_followers_on_publish_post', 10, 2 );
 

@@ -120,18 +120,146 @@ function fdfp_follow_user( $user_id = 0, $user_to_follow = 0 ) {
  */
 function fdfp_notif_user_on_follow($user_to_follow , $user_id){
 	
+	// User Information
+	// Site Url 
+	$site_url = get_site_url();
+
+	// To User 
 	$to_user_info = get_userdata($user_to_follow);
+	$to = $to_user_info->user_email;
+	$name = $to_user_info->first_name.' '.$to_user_info->last_name;
+
+	// Current User 
 	$user_info = get_userdata($user_id);
+	$user_info_link = $site_url."/?author=".$user_id;
+
+	// To Get Company Logo
+	$email_notif_settings = json_decode( get_option( 'email_notif_settings' ) );
+
+	// Logo
+	if(!empty($email_notif_settings->logo)){
+		$logo = "<img src=".$email_notif_settings->logo." width='150px' height='100px'>";
+	}else{
+		$logo = "My Digital Sauce";
+	}
+
+	// Set the value of FROM in header from admin panel
+	$from_name = "";
+	// set name 
+	if(!empty($email_notif_settings->from_name)){
+		$from_name .= $email_notif_settings->from_name;
+	}
+
+	// set email
+	if(!empty($email_notif_settings->from_email)){
+		$from_name .= " <".$email_notif_settings->from_email.">";
+	}
+
+	// If both the value of admin panel is empty
+	if(empty($from_name)){
+		$from_name = "My Digital Sauce <example@example.com>";
+	}
 	
-	$to = $to_user_info->user_email;	
+	// Mail Information
 	$subject = 'New Follower';
-	$body = 'Username : '.$user_info->user_login.' is following you. Thank You.';
-	$headers = array('Content-Type: text/html; charset=UTF-8');
+
+	// Get The Template 
+	$body = file_get_contents(plugin_dir_path( __FILE__ ) . '../templates/email-template.html',true);
+
+	// Message To print In Template
+	$message = "Username : ".$user_info->user_login." is Following You.";
+	
+	// Body And Header Of mail
+	$body = str_replace('[NameGoesHere]', $name, $body);
+	$body = str_replace('[MessageGoesHere]', $message, $body);
+	$body = str_replace('[WebSiteUrl]', $site_url, $body);
+	$body = str_replace('[CompanyLogoHere]', $logo, $body);
+	$body = str_replace('[LinkGoesHere]', $user_info_link, $body);
+	$headers = array('Content-Type: text/html; charset=UTF-8','From: '.$from_name);
 		
+	// Mail Function
 	wp_mail( $to, $subject, $body, $headers );
 	
 	return true;
 }
+
+
+/**
+ * Mail a user
+ *
+ * Email notification on User To unfollow
+ *
+ * @access      private
+ * @since       1.0
+ * @param 		int $user_id        - the ID of the user that is doing the following
+ * @param 		int $user_to_unfollow - the ID of the user that is being unfollowed
+ * @return      bool
+ */
+function fdfp_notif_user_on_unfollow($user_to_unfollow , $user_id){
+
+	// User Information
+	// Site Url 
+	$site_url = get_site_url();
+
+	// To User 
+	$to_user_info = get_userdata($user_to_unfollow);
+	$to = $to_user_info->user_email;
+	$name = $to_user_info->first_name.' '.$to_user_info->last_name;
+
+	// Current User 
+	$user_info = get_userdata($user_id);
+	$user_info_link = $site_url."/?author=".$user_id;
+
+	// To Get Company Logo
+	$email_notif_settings = json_decode( get_option( 'email_notif_settings' ) );
+
+	// Logo
+	if(!empty($email_notif_settings->logo)){
+		$logo = "<img src=".$email_notif_settings->logo." width='150px' height='100px'>";
+	}else{
+		$logo = "My Digital Sauce";
+	}
+
+	// Set the value of FROM in header from admin panel
+	$from_name = "";
+	// set name 
+	if(!empty($email_notif_settings->from_name)){
+		$from_name .= $email_notif_settings->from_name;
+	}
+
+	// set email
+	if(!empty($email_notif_settings->from_email)){
+		$from_name .= " <".$email_notif_settings->from_email.">";
+	}
+
+	// If both the value of admin panel is empty
+	if(empty($from_name)){
+		$from_name = "My Digital Sauce <example@example.com>";
+	}
+	
+	// Mail Information
+	$subject = 'User Unfollow';
+
+	// Get The Template 
+	$body = file_get_contents(plugin_dir_path( __FILE__ ) . '../templates/email-template.html',true);
+
+	// Message To print In Template
+	$message = "Username : ".$user_info->user_login." just unfollowed you.";
+	
+	// Body And Header Of mail
+	$body = str_replace('[NameGoesHere]', $name, $body);
+	$body = str_replace('[MessageGoesHere]', $message, $body);
+	$body = str_replace('[WebSiteUrl]', $site_url, $body);
+	$body = str_replace('[CompanyLogoHere]', $logo, $body);
+	$body = str_replace('[LinkGoesHere]', $user_info_link, $body);
+	$headers = array('Content-Type: text/html; charset=UTF-8','From: '.$from_name);
+		
+	// Mail Function
+	wp_mail( $to, $subject, $body, $headers );
+	
+	return true;
+}
+
 
 
 /**
@@ -193,7 +321,14 @@ function fdfp_unfollow_user( $user_id = 0, $unfollow_user = 0 ) {
 
 	if ( $modified ) {
 		do_action( 'fdfp_post_unfollow_user', $user_id, $unfollow_user );
-		return true;
+		
+        // Mail To User Notification of unfollow
+		$check_mail = fdfp_notif_user_on_unfollow($unfollow_user, $user_id);
+
+		if( $check_mail )
+			return true;
+		else
+			return false;
 	}
 
 	return false;

@@ -1,4 +1,3 @@
-
 <h3>General</h3>
 <p>General settings go here</p>
 
@@ -21,7 +20,9 @@ if ( $_POST['action'] === 'update_email_notif_settings' ) {
   <?php
   $email_notif_settings = json_decode( get_option( 'email_notif_settings' ) );
   ?>
-  <h4 style="margin-top: 0;" >Update Email Notification Settings</h4>
+	<h4 style="margin-top: 0;" >Update Email Notification Settings</h4>
+	
+	<a href="<?php echo get_site_url(); ?>/wp-admin/options-general.php?page=saucy-followers&tab=email-template" class="button button-default" id="showEmailTemplateButton">Show Email Template View</a>
 
 	<table class="form-table">
 		<tbody>
@@ -46,5 +47,6 @@ if ( $_POST['action'] === 'update_email_notif_settings' ) {
 		</tbody>
 	</table>
 
-  <button type="submit" name="action" value="update_email_notif_settings" class="button button-primary" >Save Changes</button>
+	<button type="submit" name="action" value="update_email_notif_settings" class="button button-primary" >Save Changes</button>
+	
 </form>

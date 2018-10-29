@@ -20,6 +20,7 @@ $tab = ( ! empty( $_GET['tab'] ) ) ? esc_attr( $_GET['tab'] ) : 'general';
 .saucy-followers-admin-display-wrap ul {
 	list-style-type: disc; padding-left: 16px;
 }
+
 </style>
 
 <div class="saucy-followers-admin-display-wrap wrap">
@@ -41,6 +42,10 @@ $tab = ( ! empty( $_GET['tab'] ) ) ? esc_attr( $_GET['tab'] ) : 'general';
 
 		<?php require plugin_dir_path( __FILE__ ) . '/admin-shortcodes-tab.php'; ?>
 
+	<?php } else if( $tab === 'email-template' ){ ?>
+
+		<?php require plugin_dir_path( __FILE__ ) . '/admin-email-template.php'; ?>
+
 	<?php } else { ?>
 
 		<?php require plugin_dir_path( __FILE__ ) . '/admin-help-tab.php'; ?>
@@ -48,3 +53,4 @@ $tab = ( ! empty( $_GET['tab'] ) ) ? esc_attr( $_GET['tab'] ) : 'general';
 	<?php } ?>
 
 </div>
+
